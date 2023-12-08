@@ -4,7 +4,8 @@ const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
-
+const { v4: uuidv4 } = require("uuid");
+const newUUID = uuidv4();
 dotenv.config();
 
 const app = express();
@@ -55,8 +56,8 @@ app.post("/api/register", async (req, res) => {
 
     // Inserting the user
     const insertQuery =
-      "INSERT INTO users (email, username, password) VALUES (?, ?, ?)";
-    await db.query(insertQuery, [email, username, hashedPassword]);
+      "INSERT INTO users (id,email, username, password) VALUES (?, ?, ?)";
+    await db.query(insertQuery, [newUUID, email, username, hashedPassword]);
 
     res.status(201).json({ message: "Registration successful" });
   } catch (error) {
